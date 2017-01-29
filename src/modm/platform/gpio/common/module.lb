@@ -11,12 +11,17 @@
 # -----------------------------------------------------------------------------
 
 def init(module):
-    module.name = "gpio.generic"
+    module.name = "gpio.common"
     module.parent = "platform"
 
 def prepare(module, options):
     return True
 
 def build(env):
+    env.substitutions = {"target": env[":target"].identifier}
     env.outbasepath = "src/modm/platform/gpio"
-    env.copy("software_gpio.hpp")
+
+    env.template("connector_detail.hpp.in")
+    env.copy("connector.hpp")
+    env.copy("inverted.hpp")
+    env.copy("software_port.hpp")
