@@ -19,7 +19,7 @@ def prepare(module, options):
     if not options[":target"].has_driver("gpio:lpc"):
         return False
 
-    module.depends([":platform:core", ":platform:gpio.generic", ":platform:i2c.generic"])
+    module.depends(":platform:core", ":platform:gpio.generic", ":platform:i2c.generic")
     return True
 
 def build(env):

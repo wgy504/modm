@@ -19,7 +19,7 @@ def prepare(module, options):
     if not options[":target"].has_driver("clock:avr"):
         return False
 
-    module.depends([":platform:core", ":platform:clock.generic"])
+    module.depends(":platform:core", ":platform:clock.generic")
     return True
 
 def build(env):

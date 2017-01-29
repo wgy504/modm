@@ -23,11 +23,7 @@
 %% endif
 
 %% if options["hardfault.led"] != "disabled"
-	%% if partname.startswith("stm32f1")
-#include "../../gpio/stm32f1/gpio.hpp"
-	%% else
-#include "../../gpio/stm32/gpio.hpp"
-	%% endif
+#include "../gpio/gpio_{{ options["hardfault.led"] }}.hpp"
 
 extern "C" void _initHardFaultHandlerLed() __attribute__((optimize("Os")));
 extern "C" void _initHardFaultHandlerLed()

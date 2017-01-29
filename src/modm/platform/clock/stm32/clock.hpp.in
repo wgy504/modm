@@ -56,7 +56,7 @@ public:
 		Hse = RCC_PLLCFGR_PLLSRC_HSE,
 %% elif target["family"] in ["f0", "f3"]
 		/// High speed internal clock (8 MHz)
-	%% if target["name"] in ["302", "303", "398"] and target["size"] in ["d", "e"]
+	%% if target["family"] == "f3" and target["name"] in ["02", "03", "98"] and target["size"] in ["d", "e"]
 		Hsi = 0,
 	%% else
 		Hsi = RCC_CFGR_PLLSRC_HSI_DIV2,

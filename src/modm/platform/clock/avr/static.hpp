@@ -13,7 +13,7 @@
 #define MODM_AVR_CLOCK_HPP
 
 #include <stdint.h>
-#include "../generic/common_clock.hpp"
+#include "common_clock.hpp"
 
 using namespace modm::clock;
 

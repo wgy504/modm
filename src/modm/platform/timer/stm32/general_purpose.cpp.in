@@ -34,7 +34,7 @@
 %%   endif
 %% endif
 
-%% if (target["family"] == "f3" and target["name"] in ["373", "378"]) or target["family"] == "f0"
+%% if (target["family"] == "f3" and target["name"] in ["73", "78"]) or target["family"] == "f0"
 %%   set irq_name = id
 %% else
 %%   if id == 9

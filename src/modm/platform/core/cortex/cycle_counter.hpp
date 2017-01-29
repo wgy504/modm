@@ -12,7 +12,7 @@
 #ifndef MODM_CORTEX_CYCLE_COUNTER_HPP
 #define MODM_CORTEX_CYCLE_COUNTER_HPP
 
-#include "../../../device.hpp"
+#include "../device.hpp"
 
 namespace modm
 {

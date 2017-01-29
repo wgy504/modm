@@ -19,7 +19,7 @@ def prepare(module, options):
     if not options[":target"].has_driver("spi:lpc"):
         return False
 
-    module.depends([":platform:core"])
+    module.depends(":platform:core")
     return True
 
 def build(env):

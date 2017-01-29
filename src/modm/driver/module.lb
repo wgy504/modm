@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2017, Fabian Greif
+# Copyright (c) 2017, Niklas Hauser
 #
 # This file is part of the modm project.
 #
@@ -29,7 +30,7 @@ def prepare(module, options):
             description="Select the supply voltage of the ST7036.",
             default="3.3V"))
 
-    module.depends([":fatfs", ":ui"])
+    module.depends(":fatfs", ":ui")
     return True
 
 def build(env):

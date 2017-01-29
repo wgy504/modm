@@ -15,14 +15,6 @@
 
 #include "fsmc.hpp"
 
-%% if target["family"] in ["f2", "f3", "f4", "f7"]
-%%  set BCRx = "BCR1"
-%%  set BTRx = "BTR1"
-%% elif target["family"] == "f1"
-%%  set BCRx = "BCRx"
-%%  set BTRx = "BTRx"
-%% endif
-
 // ----------------------------------------------------------------------------
 /*
  * - Byte select lanes (NBL[1:0]) are not used during read access (they are
