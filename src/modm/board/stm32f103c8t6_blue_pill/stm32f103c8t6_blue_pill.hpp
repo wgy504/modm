@@ -22,7 +22,7 @@
 #ifndef MODM_STM32_F103C8T6_BLUE_PILL_HPP
 #define MODM_STM32_F103C8T6_BLUE_PILL_HPP
 
-#include <modm/architecture/platform.hpp>
+#include <modm/platform/platform.hpp>
 
 using namespace modm::platform;
 
