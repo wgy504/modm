@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2014, 2016, Kevin Läufer
  * Copyright (c) 2014, Sascha Schade
- * Copyright (c) 2014-2016, Niklas Hauser
+ * Copyright (c) 2014-2017, Niklas Hauser
  * Copyright (c) 2017, Fabian Greif
  *
  * This file is part of the modm project.
@@ -17,7 +17,6 @@
 
 #include <modm/architecture/interface/can.hpp>
 #include "../device.hpp"
-#include "type_ids.hpp"
 
 #include "../clock/common_clock.hpp"
 #include "can_bit_timings.hpp"
@@ -77,11 +76,6 @@ public:
 		ListenOnlyLoopBack	= CAN_BTR_SILM | CAN_BTR_LBKM,
 	};
 
-public:
-	/// TypeId used to connect GPIO pins to this peripheral's rx.
-	static const TypeId::Can{{ id }}Rx Rx;
-	/// TypeId used to connect GPIO pins to this peripheral's tx.
-	static const TypeId::Can{{ id }}Tx Tx;
 private:
 	/// Private Initializer with computed prescaler and timing constants
 	static void
