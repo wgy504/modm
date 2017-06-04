@@ -1,0 +1,52 @@
+
+import os
+
+def init(module):
+    module.name = "build.scons"
+    module.description = """SCons Build Script Generator
+
+Generates a SConstruct file to build the modm library.
+"""
+
+def prepare(module, options):
+    # The build script generator is always available
+    return True
+
+def build(env):
+    pass
+
+def post_build(env, buildlog):
+    target = env["modm:target"]
+    platform = target.properties["platform"]
+
+    files_to_build = []
+    for operations in buildlog:
+        filename = operations.filename_out
+        _, extension = os.path.splitext(filename)
+
+        if extension in [".c", ".cpp", ".cc", ".sx", ".S"]:
+            files_to_build.append(os.path.normpath(filename))
+    files_to_build.sort()
+
+    env.substitutions = {
+        "toolpath": "../../scons-build-tools/site_tools",
+        "partname": target.partname,
+        "files": files_to_build,
+    }
+
+    if platform in ["stm32"]:
+        core = target.get_driver("core")["type"]
+        if core == "cortex-m4f":
+            core = "cortex-m4"
+
+        properties = {
+            "core": core,
+        }
+        env.substitutions.update(properties)
+        env.template("resources/SConstruct.arm.in", "SConstruct")
+    elif platform in ["avr"]:
+        env.template("resources/SConstruct.avr.in", "SConstruct")
+    elif platform in ["hosted"]:
+        env.template("resources/SConstruct.hosted.in", "SConstruct")
+    else:
+        raise Exception("No valid platform found for the build script generation.")

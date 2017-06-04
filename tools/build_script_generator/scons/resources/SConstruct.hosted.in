@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+
+import os
+
+env = Environment(
+        toolpath=['{{ toolpath }}'],
+        tools=[
+            'compiler_hosted_gcc',
+            'settings_buildpath',
+            'utils_buildformat',
+            'utils_buildsize',
+            ],
+        CCFLAGS_target=[
+            ],
+        CCFLAGS_debug=['-gdwarf-2'],
+        CCFLAGS_other=[
+            '-funsigned-char',
+            ],
+        CXXFLAGS_language=[
+            '-std=c++11',
+            ]
+        CXXFLAGS_optimize=[
+            '-fno-exceptions',
+            '-fno-rtti',
+            '-fno-threadsafe-statics',
+            '-fuse-cxa-atexit',
+            ],
+        CFLAGS_language=['-std=gnu99'],
+        LINKFLAGS_target=[
+            ],
+        LINKFLAGS_optimize=[
+            "-Wl,--relax",
+            "-Wl,--gc-sections",
+            ],
+        LINKFLAGS_other=[
+            "-Wl,--fatal-warnings",
+            ],
+        ENV=os.environ)
+
+env.RemoveFromList('CCFLAGS_warning', [
+    '-Wshadow',
+    '-Wcast-align',
+    '-Wmissing-declarations',
+    '-Wcast-qual',
+    '-Wredundant-decls',])
+env.RemoveFromList('CXXFLAGS_warning', [
+    '-Wold-style-cast',
+    '-Wnon-virtual-dtor'])
+env.Append(CCFLAGS_warning=['-Werror'])
+
+env['BASEPATH']  = os.path.abspath('.')
+env['BUILDPATH'] = os.path.abspath('build')
+
+env.Append(CPPPATH=[
+    'src',
+    "src/stdc++",
+    'ext',
+])
+
+env.Append(LIBS=[
+    'boost_system',
+])
+
+files = env.Glob("*.cpp")
+files += [
+%% for file in files
+    env.File("{{ file }}"),
+%% endfor
+]
+
+program = env.Program(target='project.elf', source=files)
+
+env.Alias('size', env.Size(program))
+env.Alias('symbols', env.Symbols(program))
+
+hexfile = env.Hex(program)
+
+env.Alias('build', [hexfile, env.Listing(program)])
+env.Alias('all', ['build', 'size'])
+
+env.Default('build')
