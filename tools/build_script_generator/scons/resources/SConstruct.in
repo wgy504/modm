@@ -4,30 +4,15 @@ import os
 
 env = Environment(
         toolpath=['{{ toolpath }}'],
+%% if platform in ["stm32"]
         tools=[
             'compiler_arm_none_eabi_gcc',
             'settings_buildpath',
             'utils_buildformat',
             'utils_buildsize',
             ],
-        CCFLAGS_target=[
-            '-mcpu={{ core }}',
-            '-mthumb',
-            '-mthumb-interwork',
-            #'-mfloat-abi=softfp',
-            #'-mfpu=fpv4-sp-d16',
-            ],
+        CPU="{{ core }}",
         CFLAGS_language=['-std=gnu99'],
-        ASFLAGS_target=[
-            "-mcpu={{ core }}",
-            "-mthumb",
-        ],
-        LINKFLAGS_target=[
-            "-mcpu={{ core }}",
-            "-mthumb",
-            "-Llink",
-            "-Tlinkerscript.ld",
-            ],
         LINKFLAGS_optimize=[
             "-Wl,--relax",
             "-Wl,--gc-sections",
@@ -40,6 +25,41 @@ env = Environment(
             ],
         ENV=os.environ)
 
+#env.Append(CCFLAGS_warning=['-Werror'])
+env.Append(LINKFLAGS_other=['-Wl,--no-wchar-size-warning'])
+env.Append(LINKFLAGS_target=[
+	"-Llink",
+    "-Tlinkerscript.ld",
+    ])
+%% elif platform in ["avr"]
+        tools=[
+            'compiler_avr_gcc',
+            'settings_buildpath',
+            'utils_buildformat',
+            'utils_buildsize',
+            ],
+        CCFLAGS_target=[
+            '-mmcu={{ partname }}',
+            '-DF_CPU=16000000',
+            ],
+        CFLAGS_language=['-std=gnu99'],
+        LINKFLAGS_other=[
+            "-Wl,--fatal-warnings",
+            ],
+        ENV=os.environ)
+%% elif platform in ["hosted"]
+        tools=[
+            'compiler_hosted_gcc',
+            'settings_buildpath',
+            'utils_buildformat',
+            'utils_buildsize',
+            ],
+        CXXFLAGS_language=[
+            '-std=c++11',
+            ],
+        ENV=os.environ)
+%% endif
+
 env.RemoveFromList('CCFLAGS_warning', [
     '-Wshadow',
     '-Wcast-align',
@@ -49,25 +69,13 @@ env.RemoveFromList('CCFLAGS_warning', [
 env.RemoveFromList('CXXFLAGS_warning', [
     '-Wold-style-cast',
     '-Wnon-virtual-dtor'])
-#env.Append(CCFLAGS_warning=['-Werror'])
-env.Append(LINKFLAGS_other=['-Wl,--no-wchar-size-warning'])
 
 env['BASEPATH']  = os.path.abspath('.')
 env['BUILDPATH'] = os.path.abspath('build')
 
-env.Append(CPPPATH=[
-    'src',
-    'ext',
-    'ext/cmsis',
-    'ext/cmsis_device',
-])
+library = env.SConscript("SConscript", exports="env")
 
 files = env.Glob("*.cpp")
-files += [
-%% for file in files
-    env.File("{{ file }}"),
-%% endfor
-]
 program = env.Program(target='project.elf', source=files)
 
 env.Alias('size', env.Size(program))

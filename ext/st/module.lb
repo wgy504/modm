@@ -56,6 +56,9 @@ def prepare(module, options):
 def build(env):
     device = env[":target"]
 
+    env.append_additional_information_unique("include_path", "ext")
+    env.append_additional_information_unique("include_path", "ext/cmsis_device")
+
     folder = "stm32{}xx".format(device.identifier["family"])
     family_header = folder + ".h"
     define = None

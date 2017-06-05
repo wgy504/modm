@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+import os
+
+Import("env")
+
+env.Append(CPPPATH=[
+%% for path in include_path
+    "{{ path }}",
+%% endfor
+])
+
+env.Append(LIBS=[
+%% for library in required_library
+    "{{ library }}",
+%% endfor
+])
+
+files = [
+%% for file in files
+    env.File("{{ file }}"),
+%% endfor
+]
+
+library = env.StaticLibrary(target="modm", source=files)
+
+env.Append(LIBS=[library])
+env.AppendUnique(LIBPATH=[os.path.abspath(str(library[0].get_dir()))])
+
+Return("library")
