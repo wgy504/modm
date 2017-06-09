@@ -40,9 +40,9 @@ def prepare(module, options):
         NumericOption(
             name="main_stack_size",
             description=FileReader("option/main_stack_size.md"),
-            minimum=2**8,
-            maximum=2**16,
-            default=2**10 * 3 - 32))
+            minimum=2 ** 8,
+            maximum=2 ** 16,
+            default=2 ** 10 * 3 - 32))
 
     uarts = []
     for u in [u["instance"] for u in (options[":target"].get_all_drivers("uart") +
@@ -100,8 +100,6 @@ def prepare(module, options):
     return True
 
 def build(env):
-    env.append_additional_information_unique("include_path", "src")
-
     device = env[":target"]
     driver = device.get_driver("core")
 
@@ -136,6 +134,8 @@ def build(env):
         interrupts[int(vector["position"])] = vector["name"] + "_IRQHandler"
     properties["interrupt_table"] = interrupts
     properties["number_of_interrupts"] = max(interrupts.keys())
+
+    env.append_additional_information_unique("include_path", "src")
 
     env.substitutions = properties
     env.outbasepath = "link"
