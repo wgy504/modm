@@ -1,5 +1,6 @@
 // coding: utf-8
 /*
+ * Copyright (c) 2017, Niklas Hauser
  * Copyright (c) 2017, Sascha Schade
  *
  * This file is part of the modm project.
@@ -27,7 +28,7 @@
 namespace modm
 {
 
-namespace stm32
+namespace platform
 {
 
 /**
@@ -80,7 +81,7 @@ private:
 	initializeWithPrescaler(/* uint8_t peripheralFrequency, uint8_t riseTime, uint16_t prescaler */);
 };
 
-} // namespace stm32
+} // namespace platform
 
 } // namespace modm
 

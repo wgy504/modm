@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, Niklas Hauser
+ * Copyright (c) 2013-2015, 2017, Niklas Hauser
  *
  * This file is part of the modm project.
  *
@@ -20,7 +20,7 @@ using namespace modm::clock;
 namespace modm
 {
 
-namespace avr
+namespace platform
 {
 
 /// @ingroup avr
@@ -56,7 +56,7 @@ public:
 
 };
 
-} // namespace avr
+} // namespace platform
 
 } // namespace modm
 

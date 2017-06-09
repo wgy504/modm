@@ -3,7 +3,7 @@
  * Copyright (c) 2012-2014, 2016, Sascha Schade
  * Copyright (c) 2013-2014, 2016, Kevin Läufer
  * Copyright (c) 2014, Georgi Grinshpun
- * Copyright (c) 2014, 2016, Niklas Hauser
+ * Copyright (c) 2014, 2016-2017, Niklas Hauser
  *
  * This file is part of the modm project.
  *
@@ -57,7 +57,7 @@ nvicEnableInterrupt(IRQn_Type IRQn)
 
 // ----------------------------------------------------------------------------
 void
-modm::stm32::Can{{ id }}::initializeWithPrescaler(
+modm::platform::Can{{ id }}::initializeWithPrescaler(
 		uint16_t prescaler, uint8_t bs1, uint8_t bs2,
 		uint32_t interruptPriority, Mode startupMode, bool overwriteOnOverrun)
 {
@@ -250,7 +250,7 @@ MODM_ISR({{ reg }}_TX)
 MODM_ISR({{ reg }}_RX0)
 {
 	if ({{ reg }}->RF0R & CAN_RF0R_FOVR0) {
-		modm::ErrorReport::report(modm::stm32::CAN{{ id }}_FIFO0_OVERFLOW);
+		modm::ErrorReport::report(modm::platform::CAN{{ id }}_FIFO0_OVERFLOW);
 
 		// release overrun flag & access the next message
 		{{ reg }}->RF0R = CAN_RF0R_FOVR0 | CAN_RF0R_RFOM0;
@@ -264,7 +264,7 @@ MODM_ISR({{ reg }}_RX0)
 	{{ reg }}->RF0R = CAN_RF0R_RFOM0;
 
 	if (!rxQueue.push(message)) {
-		modm::ErrorReport::report(modm::stm32::CAN{{ id }}_FIFO0_OVERFLOW);
+		modm::ErrorReport::report(modm::platform::CAN{{ id }}_FIFO0_OVERFLOW);
 	}
 %% endif
 }
@@ -277,7 +277,7 @@ MODM_ISR({{ reg }}_RX0)
 MODM_ISR({{ reg }}_RX1)
 {
 	if ({{ reg }}->RF1R & CAN_RF1R_FOVR1) {
-		modm::ErrorReport::report(modm::stm32::CAN{{ id }}_FIFO1_OVERFLOW);
+		modm::ErrorReport::report(modm::platform::CAN{{ id }}_FIFO1_OVERFLOW);
 
 		// release overrun flag & access the next message
 		{{ reg }}->RF1R = CAN_RF1R_FOVR1 | CAN_RF1R_RFOM1;
@@ -291,7 +291,7 @@ MODM_ISR({{ reg }}_RX1)
 	{{ reg }}->RF1R = CAN_RF1R_RFOM1;
 
 	if (!rxQueue.push(message)) {
-		modm::ErrorReport::report(modm::stm32::CAN{{ id }}_FIFO1_OVERFLOW);
+		modm::ErrorReport::report(modm::platform::CAN{{ id }}_FIFO1_OVERFLOW);
 	}
 %% endif
 }
@@ -322,7 +322,7 @@ MODM_ISR(CEC_CAN)
 
 // ----------------------------------------------------------------------------
 void
-modm::stm32::Can{{ id }}::setMode(Mode mode)
+modm::platform::Can{{ id }}::setMode(Mode mode)
 {
 	// Request initialization
 	{{ reg }}->MCR |= CAN_MCR_INRQ;
@@ -341,7 +341,7 @@ modm::stm32::Can{{ id }}::setMode(Mode mode)
 
 // ----------------------------------------------------------------------------
 void
-modm::stm32::Can{{ id }}::setAutomaticRetransmission(bool retransmission)
+modm::platform::Can{{ id }}::setAutomaticRetransmission(bool retransmission)
 {
 	if (retransmission) {
 		// Enable retransmission
@@ -354,7 +354,7 @@ modm::stm32::Can{{ id }}::setAutomaticRetransmission(bool retransmission)
 
 // ----------------------------------------------------------------------------
 bool
-modm::stm32::Can{{ id }}::isMessageAvailable()
+modm::platform::Can{{ id }}::isMessageAvailable()
 {
 %% if options["buffer.rx"] > 0
 	return !rxQueue.isEmpty();
@@ -366,7 +366,7 @@ modm::stm32::Can{{ id }}::isMessageAvailable()
 
 // ----------------------------------------------------------------------------
 bool
-modm::stm32::Can{{ id }}::getMessage(can::Message& message)
+modm::platform::Can{{ id }}::getMessage(can::Message& message)
 {
 %% if options["buffer.rx"] > 0
 	if (rxQueue.isEmpty())
@@ -402,7 +402,7 @@ modm::stm32::Can{{ id }}::getMessage(can::Message& message)
 
 // ----------------------------------------------------------------------------
 bool
-modm::stm32::Can{{ id }}::isReadyToSend()
+modm::platform::Can{{ id }}::isReadyToSend()
 {
 %% if options["buffer.tx"] > 0
 	return txQueue.isNotFull();
@@ -413,7 +413,7 @@ modm::stm32::Can{{ id }}::isReadyToSend()
 
 // ----------------------------------------------------------------------------
 bool
-modm::stm32::Can{{ id }}::sendMessage(const can::Message& message)
+modm::platform::Can{{ id }}::sendMessage(const can::Message& message)
 {
 	// This function is not reentrant. If one of the mailboxes is empty it
 	// means that the software buffer is empty too. Therefore the mailbox
@@ -423,7 +423,7 @@ modm::stm32::Can{{ id }}::sendMessage(const can::Message& message)
 		// All mailboxes used at the moment
 %% if options["buffer.tx"] > 0
 		if (!txQueue.push(message)) {
-			modm::ErrorReport::report(modm::stm32::CAN{{ id }}_TX_OVERFLOW);
+			modm::ErrorReport::report(modm::platform::CAN{{ id }}_TX_OVERFLOW);
 			return false;
 		}
 		return true;
@@ -441,8 +441,8 @@ modm::stm32::Can{{ id }}::sendMessage(const can::Message& message)
 }
 
 // ----------------------------------------------------------------------------
-modm::stm32::Can{{ id }}::BusState
-modm::stm32::Can{{ id }}::getBusState()
+modm::platform::Can{{ id }}::BusState
+modm::platform::Can{{ id }}::getBusState()
 {
 	if ({{ reg }}->ESR & CAN_ESR_BOFF) {
 		return BusState::Off;
@@ -460,7 +460,7 @@ modm::stm32::Can{{ id }}::getBusState()
 
 // ----------------------------------------------------------------------------
 void
-modm::stm32::Can{{ id }}::enableStatusChangeInterrupt(
+modm::platform::Can{{ id }}::enableStatusChangeInterrupt(
 		uint32_t interruptEnable,
 		uint32_t interruptPriority)
 {
