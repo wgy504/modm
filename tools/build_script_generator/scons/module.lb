@@ -9,6 +9,11 @@ Generates a SConstruct file to build the modm library.
 """
 
 def prepare(module, options):
+    module.add_option(BooleanOption(name="include_demo_project", default=False,
+                                    description="Include a demo main file to get a full compilable project."))
+
+    module.add_option(StringOption(name="site_tools_path", default="../../scons-build-tools/site_tools",
+                                   description="Path to the SCons tools folder"))
     # The build script generator is always available
     return True
 
@@ -21,8 +26,9 @@ def post_build(env, buildlog):
 
     # Extract all source code files
     files_to_build = []
+    outpath = env.outpath(".")
     for operations in buildlog:
-        filename = operations.filename_out
+        filename = os.path.relpath(operations.filename_out, outpath)
         _, extension = os.path.splitext(filename)
 
         if extension in [".c", ".cpp", ".cc", ".sx", ".S"]:
@@ -30,17 +36,22 @@ def post_build(env, buildlog):
     files_to_build.sort()
 
     core = target.get_driver("core")["type"]
-    if core == "cortex-m4f":
+    if core.startswith("cortex-m4"):
         core = "cortex-m4"
+    elif core.startswith("cortex-m7"):
+        core = "cortex-m7"
 
     env.substitutions = {
         "partname": target.partname,
         "platform": platform,
         "core": core,
-        "toolpath": "../../scons-build-tools/site_tools",
+        "toolpath": env["site_tools_path"],
         "files": files_to_build,
+        "metadata": buildlog.additional_information,
     }
-    env.substitutions.update(buildlog.additional_information)
 
-    env.template("resources/SConstruct.in", "SConstruct")
     env.template("resources/SConscript.in", "SConscript")
+
+    if env["include_demo_project"]:
+        env.template("resources/SConstruct.in", "SConstruct")
+        env.template("resources/main.cpp.in", "main.cpp")

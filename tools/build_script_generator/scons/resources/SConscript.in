@@ -5,13 +5,13 @@ import os
 Import("env")
 
 env.Append(CPPPATH=[
-%% for path in include_path
+%% for path in metadata.include_path
     "{{ path }}",
 %% endfor
 ])
 
 env.Append(LIBS=[
-%% for library in required_library
+%% for library in metadata.required_library
     "{{ library }}",
 %% endfor
 ])
