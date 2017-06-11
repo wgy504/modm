@@ -96,7 +96,7 @@ frequency should be adapted accordingly:
 		2100: [16, 32, 48, 64, 80, 96, 112, 120] }
 	%}
 %% elif target["family"] == "f4"
-	%% if target["name"] in ["10", "11", "12"]
+	%% if target["name"] in ["10", "11", "12", "13", "23"]
 /*
 For the 410, 411 & 412 devices, the maximum frequency of the SYSCLK and HCLK is 100 MHz,
 PCLK2 100 MHz and PCLK1 50 MHz. Depending on the device voltage range, the maximum

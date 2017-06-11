@@ -62,13 +62,30 @@ class Instance(Module):
         properties["channels"] = sorted(channels)
 
         if target["family"] == "f3":
-            properties["adc_ccr"] = "ADC12_CCR"
-            if id in [1,2]:
+            if len(driver["instance"]) == 1:
+                properties["adc_ccr"] = "ADC1_CCR"
+                properties["adc_pre"] = "ADC1PRES"
+                properties["id_common"] = "1"
+                properties["id_common_u"] = "1_COMMON"
+            elif instance_id in [1,2]:
+                properties["adc_ccr"] = "ADC12_CCR"
                 properties["adc_pre"] = "ADCPRE12"
-            elif id in [3,4]:
+                properties["id_common"] = "12"
+                properties["id_common_u"] = "1_2_COMMON"
+            elif instance_id in [3,4]:
+                properties["adc_ccr"] = "ADC34_CCR"
                 properties["adc_pre"] = "ADCPRE34"
+                properties["id_common"] = "34"
+                properties["id_common_u"] = "3_4_COMMON"
         else:
             properties["adc_ccr"] = "ADC_CCR"
+            if len(driver["instance"]) == 1:
+                properties["id_common"] = "1"
+                properties["id_common_u"] = "1_COMMON"
+            else:
+                properties["id_common"] = "123"
+                properties["id_common_u"] = "123_COMMON"
+
 
         env.substitutions = properties
         env.outbasepath = "src/modm/platform/adc"

@@ -31,10 +31,10 @@ def build(env):
     properties["partname"] = device.partname
 
     target = device.identifier
-    if (target["family"] == "f4" and (target["name"] not in ["05", "07", "12", "15", "17"])) or target["family"] == "f7" or target["family"] == "f3":
-        properties["FMC"] = "FMC"
-    else:
+    if device.has_driver("fsmc:stm32*"):
         properties["FMC"] = "FSMC"
+    else:
+        properties["FMC"] = "FMC"
 
     if target["family"] in ["f2", "f3", "f4", "f7"]:
         properties["BCRx"] = "BCR1"

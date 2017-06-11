@@ -55,8 +55,8 @@ class Instance(Module):
         if properties["target"]["family"] == "f0":
             properties["apb"] = "2" if self.instance in [1, 6, 7, 8] else "1"
         else:
-            properties["apb"] = "2" if self.instance in [1, 6] else "1"
-        properties["apb_post"] = "1" if properties["target"]["family"] in ["l4"] else ""
+            properties["apb"] = "2" if self.instance in [1, 6, 9, 10] else "1"
+        properties["apb_post"] = "1" if properties["target"]["family"] in ["l4"] and self.instance != 1 else ""
 
         properties["uart_name"] = self.driver["name"].capitalize()
 
