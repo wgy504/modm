@@ -57,7 +57,7 @@ struct GpioConnector<Peripheral::{{ per }}, Signals...>
 	%% endfor
 			);
 		if (id != uint32_t(-1)) {
-			AFIO->{{reg}} = (AFIO->{{reg}} & ~({{ remap["mask"] }}UL << {{ remap["position"] }})) | (lmb(id) << {{ remap["position"] }});
+			AFIO->{{reg}} = (AFIO->{{reg}} & ~({{ remap["mask"] }}UL << {{ (remap["position"] | int) % 32 }})) | (lmb(id) << {{ (remap["position"] | int) % 32 }});
 		}
 		detail::GpioSignalConnect<Peripheral::{{ per }}, Signals...>::connect();
 	}

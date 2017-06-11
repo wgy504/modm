@@ -74,7 +74,7 @@ struct Gpio
 	enum class
 	OutputSpeed
 	{
-%% if target["family"] in ["f2", "f4", "f7"]
+%% if target["family"] in ["f2", "f4", "f7", "l4"]
 		MHz2 = 0,		///< Low speed
 		MHz25 = 0x1,	///< Medium speed
 		MHz50 = 0x2,	///< Fast speed

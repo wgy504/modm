@@ -53,6 +53,12 @@ struct Gpio
 		PullUp,		///< The input pin is pulled to Vcc
 	};
 
+	enum class
+	OutputType : uint8_t
+	{
+		PushPull	///< push-pull on output
+	};
+
 	/// Each External Interrupt can be configured to trigger on these conditions.
 	enum class
 	InputTrigger : uint8_t
@@ -111,6 +117,13 @@ public:
 
 	static constexpr modm::Gpio::Direction direction = modm::Gpio::Direction::Out;
 
+	enum class
+	OutputType
+	{
+		PushPull,
+		OpenDrain,
+	};
+
 public:
 	inline static void configure(Gpio::InputType type)
 	{ inputType = type; }
@@ -118,6 +131,7 @@ public:
 	inline static void setInput(Gpio::InputType type)
 	{ inputType = type; }
 	modm_always_inline static void setOutput() {}
+	modm_always_inline static void setOutput(OutputType) {}
 	modm_always_inline static void setOutput(bool status) {
 		set(status);
 	}

@@ -78,6 +78,11 @@ protected:
 	inline static void
 	setAnalogInput() {
 		{{reg}}->MODER |= i(Mode::Analog) << (pin * 2);
+		%% if target["family"] in ["l4"]
+			%% if target["name"] in ["71", "75", "76", "85", "86"]
+		{{reg}}->ASCR |= (1 << pin);
+			%% endif
+		%% endif
 	}
 
 public:
@@ -157,12 +162,12 @@ public:
 		// Enable SYSCFG
 		RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
 		SYSCFG->EXTICR[index] = (SYSCFG->EXTICR[index] & ~syscfg_mask) | syscfg_value;
-		EXTI->IMR |= mask;
+		EXTI->IMR{{pf}} |= mask;
 	}
 	modm_always_inline static void
 	disableExternalInterrupt()
 	{
-		EXTI->IMR &= ~mask;
+		EXTI->IMR{{pf}} &= ~mask;
 	}
 	modm_always_inline static void
 	enableExternalInterruptVector(const uint32_t priority)
@@ -181,30 +186,30 @@ public:
 		switch (trigger)
 		{
 		case InputTrigger::RisingEdge:
-			EXTI->RTSR |=  mask;
-			EXTI->FTSR &= ~mask;
+			EXTI->RTSR{{pf}} |=  mask;
+			EXTI->FTSR{{pf}} &= ~mask;
 			break;
 		case InputTrigger::FallingEdge:
-			EXTI->RTSR &= ~mask;
-			EXTI->FTSR |=  mask;
+			EXTI->RTSR{{pf}} &= ~mask;
+			EXTI->FTSR{{pf}} |=  mask;
 			break;
 		case InputTrigger::BothEdges:
-			EXTI->RTSR |=  mask;
-			EXTI->FTSR |=  mask;
+			EXTI->RTSR{{pf}} |=  mask;
+			EXTI->FTSR{{pf}} |=  mask;
 			break;
 		}
 	}
 	modm_always_inline static bool
 	getExternalInterruptFlag()
 	{
-		return (EXTI->PR & mask);
+		return (EXTI->PR{{pf}} & mask);
 	}
 	/**	\brief	Reset the interrupt flag in the interrupt routine. */
 	modm_always_inline static void
 	acknowledgeExternalInterruptFlag()
 	{
 		// Flags are cleared by writing a one to the flag position.
-		EXTI->PR |= mask;
+		EXTI->PR{{pf}} |= mask;
 	}
 	%% endif
 	// GpioIO

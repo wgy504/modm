@@ -67,6 +67,9 @@ public:
 		setOutput();
 		set(status);
 	}
+	modm_always_inline static void setOutput(OutputType) {
+		setOutput();
+	}
 	modm_always_inline static void setOutput() {
 		%% if pue
 		PUE{{port}} &= ~mask;

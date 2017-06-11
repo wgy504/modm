@@ -145,7 +145,6 @@ def pre_build(env):
 
     signal_map = defaultdict(list)
     if "f1" in driver["type"]:
-        gpio_source = "gpio_pin_f1.hpp.in"
         # map all remaps onto pins
         for remap in driver["remap"]:
             # smap = defaultdict(list)
@@ -204,10 +203,23 @@ def pre_build(env):
         bprops[key] = {
             "gpio": gpio,
             "exti_irqn": extimap[gpio["pin"]],
-            "signals": extracted_signals
+            "signals": extracted_signals,
+            "pf": "1" if device.identifier["family"] in ["l4"] else ""
         }
 
-    bprops["all_peripherals"] = sorted(list(set(s["driver"] for s in all_signals.values())))
+    all_peripherals = [s["driver"] for s in all_signals.values()]
+    # Signals are not enough, since there are peripherals that don't have signals.
+    # Example: STM32F401RE < 64pins: SPI4 cannot be connected to any pins.
+    # FIXME: Allow accessing device file more freely
+    all_drivers = [d for d in device._properties["driver"] if d["name"] not in ["gpio", "core"]]
+    for d in all_drivers:
+        dname = d["name"].capitalize()
+        if "instance" in d:
+            for instance in d["instance"]:
+                all_peripherals.append(dname + instance.capitalize())
+        else:
+            all_peripherals.append(dname)
+    bprops["all_peripherals"] = sorted(list(set(all_peripherals)))
     bprops["all_signals"] = sorted(list(set(s["name"] for s in all_signals.values())))
     if "remap" in driver:
         bprops["all_peripherals"] = sorted(list(set(bprops["all_peripherals"] + [get_driver(r) for r in driver["remap"]])))

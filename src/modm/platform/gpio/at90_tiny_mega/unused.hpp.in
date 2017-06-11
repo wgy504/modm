@@ -63,6 +63,7 @@ public:
 
 public:
 	static void setOutput(bool) {}
+	static void setOutput(OutputType) {}
 	static void setOutput() {}
 	static void set() {}
 	static void set(bool) {}
