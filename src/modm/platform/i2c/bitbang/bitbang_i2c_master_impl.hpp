@@ -72,8 +72,8 @@ modm::platform::BitBangI2cMaster<Scl, Sda>::connect(PullUps pullups)
 	Connector::disconnect();
 	SCL::configure(input);
 	SDA::configure(input);
-	SCL::setOutput(Gpio::OutputType::OpenDrain);
-	SDA::setOutput(Gpio::OutputType::OpenDrain);
+	SCL::setOutput(SCL::OutputType::OpenDrain);
+	SDA::setOutput(SDA::OutputType::OpenDrain);
 	if (reset != ResetDevices::NoReset) resetDevices<SCL, uint32_t(reset)>();
 	Connector::connect();
 }

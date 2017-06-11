@@ -84,7 +84,7 @@ public:
 		using Connector = GpioConnector<Peripheral::Can{{ id }}, Signals...>;
 		using Tx = typename Connector::template GetSignal< Gpio::Signal::Tx >;
 		using Rx = typename Connector::template GetSignal< Gpio::Signal::Rx >;
-		static_assert(Connector::template IsValid<Tx> and Connector::template IsValid<Rx> and sizeof...(Signals) == 2),
+		static_assert(Connector::template IsValid<Tx> and Connector::template IsValid<Rx> and sizeof...(Signals) == 2,
 					  "Can{{ id }}::connect() requires one Tx and one Rx signal!");
 
 		// Connector::disconnect();

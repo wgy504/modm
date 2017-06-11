@@ -49,7 +49,7 @@ modm::platform::BitBangSpiMaster<Sck, Mosi, Miso>::connect()
 	static_assert(ContainsSck and ContainsMosi and
 				  ((not Connector::template IsValid<Miso> and sizeof...(Signals) == 2) or
 				   (    Connector::template IsValid<Miso> and sizeof...(Signals) == 3 and ContainsMiso)),
-				  "BitBangSpiMaster<Sck, Mosi, Miso> can only connect to the same Sck, Mosi and Miso signals of the declaration!")
+				  "BitBangSpiMaster<Sck, Mosi, Miso> can only connect to the same Sck, Mosi and Miso signals of the declaration!");
 
 	// Connector::disconnect();
 	Sck::setOutput(Gpio::OutputType::PushPull);
