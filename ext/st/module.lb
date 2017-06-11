@@ -16,7 +16,7 @@ import re
 
 def getDefineForDevice(device_id, familyDefines):
     # get all defines for this device name
-    devName = "STM32{}{}".format(device_id["family"].upper(), device_id["name"])
+    devName = "STM32{}{}".format(device_id["family"].upper(), device_id["name"].upper())
 
     # Map STM32F7x8 -> STM32F7x7
     if device_id["family"] == "f7" and devName[8] == "8":
