@@ -4,7 +4,7 @@
 %% if platform in ["avr"]
 #include <modm/architecture/architecture.hpp>
 
-using namespace modm::avr;
+using namespace modm::platform;
 
 using LedRed = GpioOutputB4;
 
