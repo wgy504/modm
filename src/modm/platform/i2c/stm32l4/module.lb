@@ -68,5 +68,4 @@ def prepare(module, options):
     return True
 
 def build(env):
-    env.outbasepath = "src/modm/platform/i2c"
-    env.copy("type_ids.hpp")
+    pass

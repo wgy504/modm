@@ -138,7 +138,7 @@ void *__wrap__malloc_r(struct _reent *r, size_t size)
 void *__wrap__calloc_r(struct _reent *r, size_t size)
 {
 	(void) r;
-	void *ptr = __wrap_malloc_r(r, size);
+	void *ptr = __wrap__malloc_r(r, size);
 	if (ptr) memset(ptr, 0, size);
 	return ptr;
 }

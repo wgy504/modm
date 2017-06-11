@@ -60,23 +60,21 @@ _sbrk_r(struct _reent *r,  ptrdiff_t size)
 	//  Return pointer to start of new heap area.
 	return heap;
 }
-
-// FIXME: "Unwrap" the malloc for newlib allocator
 void *__real__malloc_r(struct _reent *r, size_t size);
 void *__wrap__malloc_r(struct _reent *r, size_t size) {
-	void * ptr = __real_malloc_r(r, size);
+	void * ptr = __real__malloc_r(r, size);
 	modm_assert_debug(ptr, "core", "heap", "malloc", size);
 	return ptr;
 }
 void *__real__calloc_r(struct _reent *r, size_t size);
 void *__wrap__calloc_r(struct _reent *r, size_t size) {
-	void * ptr = __real_calloc_r(r, size);
+	void * ptr = __real__calloc_r(r, size);
 	modm_assert_debug(ptr, "core", "heap", "calloc", size);
 	return ptr;
 }
 void *__real__realloc_r(struct _reent *r, void *p, size_t size);
 void *__wrap__realloc_r(struct _reent *r, void *p, size_t size) {
-	void * ptr = __real_realloc_r(r, p, size);
+	void * ptr = __real__realloc_r(r, p, size);
 	modm_assert_debug(ptr, "core", "heap", "realloc", size);
 	return ptr;
 }

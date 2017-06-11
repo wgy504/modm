@@ -10,20 +10,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 // ----------------------------------------------------------------------------
-{{ generation_block }}
 
 #ifndef MODM_STM32_I2C_{{ id }}_HPP
 #define MODM_STM32_I2C_{{ id }}_HPP
 
-#include "../../../device.hpp"
-#include "type_ids.hpp"
 #include <modm/architecture/interface/i2c_master.hpp>
-#include <modm/architecture/platform/driver/clock/generic/common_clock.hpp>
+#include <modm/platform/clock/common_clock.hpp>
 #include <modm/platform/gpio/connector.hpp>
 
 /**
- * @ingroup 	{{target.string}}
- * @defgroup	{{target.string}}_i2c I2C
+ * @ingroup 	{{partname}}
+ * @defgroup	{{partname}}_i2c I2C
  */
 
 namespace modm
@@ -40,14 +37,10 @@ namespace platform
  * @author		Georgi Grinshpun
  * @author		Niklas Hauser
  * @author		Sascha Schade (strongly-typed)
- * @ingroup		{{target.string}}_i2c
+ * @ingroup		{{partname}}_i2c
  */
 class I2cMaster{{ id }} : public ::modm::I2cMaster
 {
-public:
-	static const TypeId::I2cMaster{{ id }}Sda Sda;
-	static const TypeId::I2cMaster{{ id }}Scl Scl;
-
 public:
 	template< template<Peripheral _> class... Signals, ResetDevices reset = ResetDevices::Standard>
 	static void

@@ -10,7 +10,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 // ----------------------------------------------------------------------------
-{{ generation_block }}
 
 /* To debug the internal state of the driver, you can instantiate a
  * modm::IOStream in your main source file, which will then be used to dump
@@ -41,7 +40,7 @@
 #include "i2c_master_{{ id }}.hpp"
 #include <modm/architecture/driver/accessor.hpp>
 #include <modm/architecture/driver/atomic.hpp>
-#include <modm/container.hpp>
+#include <modm/container/container.hpp>
 
 MODM_ISR_DECL(I2C{{ id }}_ER);
 
@@ -62,7 +61,7 @@ namespace
 		modm::I2c::ConfigurationHandler configuration;
 	};
 
-	static modm::BoundedQueue<ConfiguredTransaction, {{ parameters.transaction_buffer }}> queue;
+	static modm::BoundedQueue<ConfiguredTransaction, {{ options["buffer.transaction"] }}> queue;
 	static modm::I2c::ConfigurationHandler configuration(nullptr);
 
 	// delegating
@@ -305,7 +304,7 @@ MODM_ISR(I2C{{ id }}_ER)
 	}
 	else if (sr1 & I2C_ISR_ARLO)
 	{	// arbitration lost
-		I2C{{ id }}->ISR |= I2C_ICR_ARLOCF;	
+		I2C{{ id }}->ISR |= I2C_ICR_ARLOCF;
 		DEBUG_STREAM("ARBITRATION LOST");
 		error = modm::I2cMaster::Error::ArbitrationLost;
 	}
