@@ -24,6 +24,6 @@ def prepare(module, options):
 
 def build(env):
     env.outbasepath = "src/modm/board"
-    env.copy('.', ignore=env.ignore_patterns("*.lb", "*.cfg"))
+    env.copy('.', ignore=env.ignore_patterns("*.lb", "*.cfg", "*.xml"))
     env.copy("../nucleo64_arduino.hpp", "nucleo64_arduino.hpp")
     env.append_additional_information_unique("openocd.configfile", "board/st_nucleo_f4.cfg");

@@ -24,6 +24,6 @@ def prepare(module, options):
 
 def build(env):
     env.outbasepath = "src/modm/board"
-    env.copy('.', ignore=env.ignore_patterns("*.lb", "*.cfg"))
+    env.copy('.', ignore=env.ignore_patterns("*.lb", "*.cfg", "*.xml"))
     env.append_additional_information_unique("avrdude.programmer", "arduino");
     env.append_additional_information_unique("avrdude.baudrate", "115200");
