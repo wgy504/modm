@@ -10,7 +10,7 @@
  */
 // ----------------------------------------------------------------------------
 
-#include <modm/architecture/architecture.hpp>
+#include <modm/platform/platform.hpp>
 #include <modm/processing/rtos.hpp>
 #include <modm/debug/logger.hpp>
 

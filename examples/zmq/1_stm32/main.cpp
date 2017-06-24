@@ -10,7 +10,7 @@
  */
 // ----------------------------------------------------------------------------
 
-#include <modm/architecture/platform.hpp>
+#include <modm/board/board.hpp>
 
 #include <modm/processing/timer/periodic_timer.hpp>
 
@@ -77,7 +77,7 @@ main()
 	// Led::G::setOutput();
 	// Led::B::setOutput();
 
-	using Timer = modm::platform::Timer1;
+	using Timer = Timer1;
 	using ChannelA = GpioInputE9;
 	using ChannelB = GpioInputE11;
 	auto ChannelAInputType = Gpio::InputType::PullUp;
@@ -95,10 +95,10 @@ main()
 	// Initialize Can1
 	GpioInputB8::connect(Can1::Rx, Gpio::InputType::PullUp);
 	GpioOutputB9::connect(Can1::Tx, Gpio::OutputType::PushPull);
-	Can1::initialize<Board::systemClock, Can1::Bitrate::kBps125>(9);
+	Can1::initialize<Board::systemClock, Can1::Bitrate::kBps125>();
 	CanFilter::setFilter(0, CanFilter::FIFO0,
-                        CanFilter::ExtendedIdentifier(0),
-                        CanFilter::ExtendedFilterMask(0));
+						CanFilter::ExtendedIdentifier(0),
+						CanFilter::ExtendedFilterMask(0));
 
 
 	LedGreen::set();

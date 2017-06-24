@@ -10,7 +10,7 @@
 // ----------------------------------------------------------------------------
 
 #include <modm/debug/logger.hpp>
-#include <modm/architecture/architecture.hpp>
+#include <modm/platform/platform.hpp>
 
 #include <modm/processing/timer.hpp>
 

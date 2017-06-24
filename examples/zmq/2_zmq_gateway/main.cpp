@@ -11,7 +11,7 @@
 // ----------------------------------------------------------------------------
 
 #include <modm/debug/logger.hpp>
-#include <modm/architecture/architecture.hpp>
+#include <modm/platform/platform.hpp>
 
 #include <modm/architecture/interface/can.hpp>
 #include <modm/architecture/platform/driver/can/canusb/canusb.hpp>
@@ -47,13 +47,13 @@ static constexpr modm::Can::Bitrate canBusBitRate = modm::Can::kBps125;
    With SocketCAN the baudrate must be set with the operating system.
    $ ip link set can0 type can bitrate
 */
-modm::platform::SerialInterface port("/dev/ttyUSB0", 115200);
-using CanUsb = modm::platform::CanUsb<modm::platform::SerialInterface>;
+SerialInterface port("/dev/ttyUSB0", 115200);
+using CanUsb = CanUsb<SerialInterface>;
 CanUsb canUsb(port);
-// static modm::platform::SocketCan canSocket;
+// static SocketCan canSocket;
 
 static modm::CanConnector< CanUsb > canConnector(&canUsb);
-// static modm::CanConnector< modm::platform::SocketCan > canConnector(&canSocket);
+// static modm::CanConnector< SocketCan > canConnector(&canSocket);
 
 #undef MODM_LOG_LEVEL
 #define	MODM_LOG_LEVEL modm::log::DEBUG

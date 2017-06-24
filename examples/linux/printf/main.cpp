@@ -11,7 +11,7 @@
  */
 // ----------------------------------------------------------------------------
 
-#include <modm/architecture/architecture.hpp>
+#include <modm/platform/platform.hpp>
 #include <modm/debug/logger.hpp>
 
 #include <modm_build_info.hpp>

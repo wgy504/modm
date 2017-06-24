@@ -9,7 +9,7 @@
  */
 // ----------------------------------------------------------------------------
 
-#include <modm/architecture/platform.hpp>
+#include <modm/board/board.hpp>
 
 #define MODM_CAN_MODULE_NAME "can"
 #define MODM_IOBUFFER_MODULE_NAME "iobuffer"

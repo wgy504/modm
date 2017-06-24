@@ -10,7 +10,7 @@
 // ----------------------------------------------------------------------------
 
 #include <modm/debug/logger.hpp>
-#include <modm/architecture/architecture.hpp>
+#include <modm/platform/platform.hpp>
 
 #include <modm/communication/communication.hpp>
 #include <modm/communication/modm/backend/zeromq/connector.hpp>
