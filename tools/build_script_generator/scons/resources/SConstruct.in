@@ -29,6 +29,11 @@ env = Environment(
             "--specs=nano.specs",
             "--specs=nosys.specs",
             "-nostartfiles",
+            "-Wl,-Map=${TARGET.base}.map,--cref",
+            # This is a bug in the linker with 2017Q1
+            # @salkinium filed a bug report
+            "-Wl,--undefined=modm_gpio_enable_ptr",
+            "-Wl,--undefined=modm_board_init_ptr",
             ],
         ENV=os.environ)
 
