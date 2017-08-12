@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2017, Fabian Greif
+# Copyright (c) 2017, Niklas Hauser
+#
+# This file is part of the modm project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# -----------------------------------------------------------------------------
+
+import os
+
+def init(module):
+    module.name = "build.scons"
+    module.description = """SCons Build Script Generator
+
+Generates a SConstruct file to build the modm library.
+"""
+
+def prepare(module, options):
+    module.add_option(BooleanOption(name="include_demo_project", default=False,
+                                    description="Include a demo main file to get a full compilable project."))
+    module.add_option(BooleanOption(name="include_sconstruct", default=True,
+                                    description="Generate modm specific SConstruct file."))
+
+    module.add_option(StringOption(name="build.path", default="build",
+                                   description="Path to the build folder"))
+    module.add_option(StringOption(name="image.source", default="",
+                                   description="Path to the image folder"))
+    module.add_option(StringOption(name="xpcc.source", default="",
+                                   description="Path to the XPCC source file"))
+    module.add_option(StringOption(name="xpcc.container", default="",
+                                   description="Name of the XPCC container to generate for"))
+    module.add_option(StringOption(name="xpcc.generate", default="communication",
+                                   description="Path to the XPCC generated folder"))
+    module.add_option(StringOption(name="xpcc.namespace", default="robot",
+                                   description="Namespace of the generated XPCC communications"))
+
+    if options[":target"].identifier["platform"] == "avr":
+        # we need the clock:f_cpu option!
+        module.depends(":platform:clock")
+    return True
+
+def build(env):
+    pass
+
+def post_build(env, buildlog):
+    target = env["modm:target"]
+    platform = target.identifier["platform"]
+
+    # Extract all source code files
+    files_to_build = []
+    outpath = env.outpath(".")
+    for operations in buildlog:
+        filename = os.path.relpath(operations.filename_out, outpath)
+        _, extension = os.path.splitext(filename)
+
+        if extension in [".c", ".cpp", ".cc", ".sx", ".S"]:
+            files_to_build.append(os.path.normpath(filename))
+    files_to_build.sort()
+
+    core_driver = target.get_driver("core")
+    core = core_driver["type"]
+    if core.startswith("cortex-m4"):
+        core = "cortex-m4"
+    elif core.startswith("cortex-m7"):
+        core = "cortex-m7"
+
+    curdir = os.curdir
+    rootpath = os.path.relpath(localpath("../../../"), curdir)
+    memories = []
+    if "memory" in core_driver:
+        memories.extend([
+            {
+                k:(int(v) if v.isdigit() else (int(v, 16) if v.startswith("0x") else v))
+                for k,v in memory.items()
+            }
+            for memory in core_driver["memory"]
+        ])
+
+    env.substitutions = {
+        "partname": target.partname,
+        "platform": platform,
+        "core": core,
+        "rootpath": rootpath,
+        "files": files_to_build,
+        "metadata": buildlog.metadata,
+        "memories": memories,
+        "build_path": env["build.path"],
+        "image_source": env["image.source"],
+        "xpcc_source": env["xpcc.source"],
+        "xpcc_container": env["xpcc.container"],
+        "xpcc_generate": env["xpcc.generate"],
+        "xpcc_namespace": env["xpcc.namespace"],
+    }
+
+    env.template("resources/SConscript.in", "SConscript")
+
+    if env["include_demo_project"] or env["include_sconstruct"]:
+        env.template("resources/SConstruct.in", "SConstruct")
+    if env["include_demo_project"]:
+        env.template("resources/main.cpp.in", "main.cpp")
