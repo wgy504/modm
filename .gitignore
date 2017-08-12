@@ -21,3 +21,14 @@ src/libxpcc.a
 *.config
 *.includes
 *.files
+
+examples/*/*/src
+examples/*/*/ext
+examples/*/*/link
+examples/*/*/SConscript
+examples/*/*/SConstruct
+examples/*/*/*/src
+examples/*/*/*/ext
+examples/*/*/*/link
+examples/*/*/*/SConscript
+examples/*/*/*/SConstruct
