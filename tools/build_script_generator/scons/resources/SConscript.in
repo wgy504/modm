@@ -10,12 +10,6 @@ env.Append(CPPPATH=[
 %% endfor
 ])
 
-env.Append(LIBS=[
-%% for library in metadata.required_library
-    "{{ library }}",
-%% endfor
-])
-
 files = [
 %% for file in files
     env.File("{{ file }}"),
@@ -24,7 +18,12 @@ files = [
 
 library = env.StaticLibrary(target="modm", source=files)
 
-env.Append(LIBS=[library])
+env.Append(LIBS=[
+    library,
+%% for library in metadata.required_library
+    "{{ library }}",
+%% endfor
+])
 env.AppendUnique(LIBPATH=[os.path.abspath(str(library[0].get_dir()))])
 
 # Device configuration

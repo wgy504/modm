@@ -2,7 +2,7 @@
 
 import os
 
-rootpath = "{{ rootpath }}"
+rootpath = "."
 
 env = Environment(
         toolpath=[os.path.join(rootpath, "scons", "site_tools"),
@@ -19,6 +19,9 @@ env = Environment(
             ],
         CPU="{{ core }}",
         CFLAGS_language=['-std=gnu99'],
+        CXXFLAGS_language=[
+            '-std=c++14',
+            ],
         LINKFLAGS_optimize=[
             "-Wl,--relax",
             "-Wl,--gc-sections",
@@ -91,12 +94,11 @@ env.RemoveFromList('CXXFLAGS_warning', [
     '-Wnon-virtual-dtor'])
 
 # User Config Options
-env['BASEPATH']  = os.path.abspath('.')
+env['BASEPATH']  = os.path.abspath(rootpath)
 env['BUILDPATH'] = os.path.abspath('{{ build_path }}')
 
-library = env.SConscript("SConscript", exports="env")
+library = env.SConscript(os.path.join(rootpath, "SConscript"), exports="env")
 
-env.Append(CPPPATH=["."])
 # FIXME: better globbing! (recursive?)
 files = env.Glob("*.cpp")
 %% if image_source != ""
