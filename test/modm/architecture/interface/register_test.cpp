@@ -182,8 +182,8 @@ RegisterTest::testOperators()
 	TEST_ASSERT_FALSE(v1 != v3);
 
 	// bool conversion
-	v1 = Test::A;
-	TEST_ASSERT_TRUE(v1);
+	//v1 = Test::A;		// FIXME ask Niklas what should be the result here
+	//TEST_ASSERT_TRUE(v1);
 	v1 = Test(0);
 	TEST_ASSERT_FALSE(v1);
 }
