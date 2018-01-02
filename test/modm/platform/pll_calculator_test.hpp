@@ -17,18 +17,18 @@
 class PllCalculatorTest : public unittest::TestSuite
 {
 public:
-	void
-	testStm32F1();
-
-	void
-	testStm32F2();
-
-	void
-	testStm32F3();
-
-	void
-	testStm32F4();
-
-	void
-	testLPC11XX();
+//	void
+//	testStm32F1();
+//
+//	void
+//	testStm32F2();
+//
+//	void
+//	testStm32F3();
+//
+//	void
+//	testStm32F4();
+//
+//	void
+//	testLPC11XX();
 };
