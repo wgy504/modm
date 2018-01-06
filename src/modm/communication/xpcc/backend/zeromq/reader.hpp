@@ -95,4 +95,4 @@ private:
 
 } // modm namespace
 
-#endif // MOD_EROMQ_CONNECTOR_HPP
+#endif // XPCC_ZEROMQ_READER_HPP
