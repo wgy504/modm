@@ -19,7 +19,7 @@
 
 #include <modm/architecture/utils.hpp>
 
-extern "C" uint16_t modm_sqrt32(uint32_t a);
+extern "C" uint16_t modm__sqrt32(uint32_t a);
 
 namespace modm
 {
@@ -41,7 +41,7 @@ namespace modm
 		inline uint16_t
 		sqrt(uint32_t a)
 		{
-			return modm_sqrt32(a);
+			return modm__sqrt32(a);
 		}
 		
 		/**
