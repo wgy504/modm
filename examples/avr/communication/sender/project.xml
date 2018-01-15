@@ -18,8 +18,9 @@
   <modules>
     <module>:communication</module>
     <module>:debug</module>
-    <module>:driver</module>
+    <module>:driver:mcp2515</module>
     <module>:platform:clock</module>
+    <module>:platform:core</module>
     <module>:platform:gpio</module>
     <module>:platform:spi.bitbang</module>
     <module>:platform:uart:0</module>
